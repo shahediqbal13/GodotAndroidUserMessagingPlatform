@@ -1,5 +1,6 @@
 package com.shahediqbal.ump;
 
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -84,8 +85,19 @@ public class GodotAndroidUMP extends GodotPlugin {
                     public void onConsentInfoUpdateFailure(FormError formError) {
                         // Handle the error.
                         Log.e(TAG, PLUGIN_NAME + ": " + "onConsentInfoUpdateFailure()");
+                        if (formError != null) {
+                            Log.e(TAG, PLUGIN_NAME + ": " + "Error: " + formError.getMessage());
+                        }
                     }
                 });
+    }
+
+    @UsedByGodot
+    public void ResetConsentState() {
+        if (consentInformation == null)
+            return;
+
+        consentInformation.reset();
     }
 
     private void loadForm() {
@@ -114,6 +126,9 @@ public class GodotAndroidUMP extends GodotPlugin {
                     public void onConsentFormLoadFailure(FormError formError) {
                         // Handle the error
                         Log.e(TAG, PLUGIN_NAME + ": " + "onConsentFormLoadFailure()");
+                        if (formError != null) {
+                            Log.e(TAG, PLUGIN_NAME + ": " + "Error: " + formError.getMessage());
+                        }
                     }
                 }
         );
