@@ -1,6 +1,5 @@
 package com.shahediqbal.ump;
 
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -36,16 +35,18 @@ public class GodotAndroidUMP extends GodotPlugin {
     }
 
     @UsedByGodot
-    public void initialize() {
+    public void showConsentForm() {
 // Set tag for underage of consent. false means users are not underage.
         params = new ConsentRequestParameters
                 .Builder()
                 .setTagForUnderAgeOfConsent(false)
                 .build();
+
+        loadConsentForm();
     }
 
     @UsedByGodot
-    public void initializeForDebug(String testDeviceID) {
+    public void showTestConsentForm(String testDeviceID, boolean resetConsentState) {
         ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(this.getActivity())
                 .setDebugGeography(ConsentDebugSettings
                         .DebugGeography
@@ -57,15 +58,14 @@ public class GodotAndroidUMP extends GodotPlugin {
                 .Builder()
                 .setConsentDebugSettings(debugSettings)
                 .build();
+
+        loadConsentForm();
+
+        if (resetConsentState)
+            resetConsentState();
     }
 
-    @UsedByGodot
-    public void showConsentForm() {
-        if (params == null) {
-            Log.e(TAG, PLUGIN_NAME + ": " + "You must call initialize()/initializeForDebug(..) first");
-            return;
-        }
-
+    private void loadConsentForm() {
         consentInformation = UserMessagingPlatform.getConsentInformation(this.getActivity());
         consentInformation.requestConsentInfoUpdate(
                 this.getActivity(),
@@ -90,14 +90,6 @@ public class GodotAndroidUMP extends GodotPlugin {
                         }
                     }
                 });
-    }
-
-    @UsedByGodot
-    public void ResetConsentState() {
-        if (consentInformation == null)
-            return;
-
-        consentInformation.reset();
     }
 
     private void loadForm() {
@@ -132,5 +124,12 @@ public class GodotAndroidUMP extends GodotPlugin {
                     }
                 }
         );
+    }
+
+    private void resetConsentState() {
+        if (consentInformation == null)
+            return;
+
+        consentInformation.reset();
     }
 }
