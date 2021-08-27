@@ -6,4 +6,4 @@ Under the Google EU User Consent Policy, you must make certain disclosures to yo
 Read the full Google documentation: https://developers.google.com/admob/ump/android/quick-start
 
 
-Note: This library doesn't contain a sample for Godot yet. Will try to ad later.
+Note: This library doesn't contain a sample for Godot yet. Will try to add later.
